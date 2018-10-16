@@ -7,12 +7,13 @@ The recommended installation procedure is to use the `install_github` command fr
 ```r
 devtools::install_github(c("SantanderMetGroup/transformeR", "SantanderMetGroup/geoprocessoR"))
 ```
-**NOTE:** Note that `transformeR` is a dependency for `geoprocessoR`. Note that `transformeR` also includes illustrative datasets for the `climate4R` framework.
+**NOTE:** Note that `transformeR` is a dependency for `geoprocessoR`. It also requires rgdal: `install.packages("rgdal")`. Note that `transformeR` also includes illustrative datasets for the `climate4R` framework.
 
 **EXAMPLE:** The following code shows two examples of `climate4R` data projection, for station and gridded data:
 
 ```r
 library(transformeR)
+library(geoprocesoR)
 data("VALUE_Iberia_pr")
 plot(getCoordinates(VALUE_Iberia_pr))
 grid <- projectGrid(VALUE_Iberia_pr,
@@ -26,7 +27,10 @@ grid <- projectGrid(EOBS_Iberia_pr,
                     original.CRS = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0",
                     new.CRS = "+init=epsg:28992")
 plot(get2DmatCoordinates(grid))
-require(visualizeR)
+
+# Requiers visualizeR
+# devtools::install_github("SantanderMetGroup/visualizeR")
+library(visualizeR)
 spatialPlot(climatology(grid))
 ```
 
