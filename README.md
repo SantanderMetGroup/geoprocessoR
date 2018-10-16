@@ -7,9 +7,9 @@ The recommended installation procedure is to use the `install_github` command fr
 ```r
 devtools::install_github(c("SantanderMetGroup/transformeR", "SantanderMetGroup/geoprocessoR"))
 ```
-**NOTE:** Note that `transformeR` is a dependency for `geoprocessoR`. Note that `transformeR` also includes illustrative datasets for the `climate4r` framework.
+**NOTE:** Note that `transformeR` is a dependency for `geoprocessoR`. Note that `transformeR` also includes illustrative datasets for the `climate4R` framework.
 
-**EXAMPLE:** The following code shows two examples of `climate4r` data projection, for station and gridded data:
+**EXAMPLE:** The following code shows two examples of `climate4R` data projection, for station and gridded data:
 
 ```r
 library(transformeR)
@@ -33,6 +33,7 @@ spatialPlot(climatology(grid))
 ---
 References and further information: 
 
-Iturbide et al. (2018) climate4R: An R-based Framework for Climate Data Access, Post-processing and Bias Correction. Submitted to **Environmental Modeling and Software***, http://www.meteo.unican.es/climate4r_paper 
+Iturbide et al. (2019) The R-based climate4R open framework for Reproducible Climate Data Access and Post-processing. **Environmental Modelling and Software** 111: 42-54.  https://doi.org/10.1016/j.envsoft.2018.09.009.
+
 
 Cofiño et al. (2017) The ECOMS User Data Gateway: Towards seasonal forecast data provision and research reproducibility in the era of Climate Services. **Climate Services**, http://dx.doi.org/10.1016/j.cliser.2017.07.001.
