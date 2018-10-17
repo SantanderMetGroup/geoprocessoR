@@ -9,28 +9,24 @@ devtools::install_github(c("SantanderMetGroup/transformeR", "SantanderMetGroup/g
 ```
 **NOTE:** Note that `transformeR` is a dependency for `geoprocessoR`. It also requires rgdal: `install.packages("rgdal")`. Note that `transformeR` also includes illustrative datasets for the `climate4R` framework.
 
-**EXAMPLE:** The following code shows two examples of `climate4R` data projection, for station and gridded data:
+**EXAMPLE:** The following code shows an example of `climate4R` data projection for gridded data (see the [Wiki](https://github.com/SantanderMetGroup/geoprocessoR/wiki) for more worked examples).
 
 ```r
 library(transformeR)
 library(geoprocesoR)
-data("VALUE_Iberia_pr")
-plot(getCoordinates(VALUE_Iberia_pr))
-grid <- projectGrid(VALUE_Iberia_pr,
-                    original.CRS = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0",
-                    new.CRS = "+init=epsg:28992")
-plot(getCoordinates(grid))
 
 data("EOBS_Iberia_pr")
 plot(get2DmatCoordinates(EOBS_Iberia_pr))
+
 grid <- projectGrid(EOBS_Iberia_pr,
                     original.CRS = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0",
                     new.CRS = "+init=epsg:28992")
 plot(get2DmatCoordinates(grid))
 
-# Requiers visualizeR
+# Use visualizeR to plot the mean climatology of the original and projected grids:
 # devtools::install_github("SantanderMetGroup/visualizeR")
 library(visualizeR)
+spatialPlot(climatology(EOBS_Iberia_pr))
 spatialPlot(climatology(grid))
 ```
 
