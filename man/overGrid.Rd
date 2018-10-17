@@ -27,6 +27,22 @@ station data.
 \details{
 All grid locations outside layer are filled with NAs.
 }
+\examples{
+data("EOBS_Iberia_pr")
+require("visualizeR")
+spatialPlot(climatology(EOBS_Iberia_pr))
+
+data("PRUDENCEregions")
+IP <- PRUDENCEregions[2,]
+
+spatialPlot(climatology(EOBS_Iberia_pr), sp.layout = list(IP, first = FALSE))
+
+ov <- overGrid(EOBS_Iberia_pr, layer = IP)
+spatialPlot(climatology(ov), sp.layout = list(IP, first = FALSE))
+
+ovs <- overGrid(EOBS_Iberia_pr, layer = IP, subset = TRUE)
+spatialPlot(climatology(ovs), sp.layout = list(IP, first = FALSE))
+}
 \author{
 M. Iturbide
 }
