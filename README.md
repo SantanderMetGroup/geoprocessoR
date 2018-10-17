@@ -2,7 +2,7 @@
 
 A package with tools for climate data geoprocessing. 
 
-This package is part of the [climate4R bundle](http://www.meteo.unican.es/climate4r), formed by the core packages `loadeR`, `transformeR`, `downscaleR` and `visualizeR`.
+This package is part of the [climate4R bundle](http://www.meteo.unican.es/climate4r), which is formed by the core packages `loadeR`, `transformeR`, `downscaleR` and `visualizeR`.
 
 The recommended installation procedure is to use the `install_github` command from the devtools R package (see the installation info in the wiki):
 
