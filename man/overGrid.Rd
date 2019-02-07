@@ -46,3 +46,4 @@ spatialPlot(climatology(ovs), sp.layout = list(IP, first = FALSE))
 \author{
 M. Iturbide
 }
+\concept{subsetting}

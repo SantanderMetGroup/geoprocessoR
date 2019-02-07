@@ -52,7 +52,7 @@ overGrid <- function(grid, layer, subset = FALSE) {
       # grr <- lapply(1:n.run, function(k){
             # grid.r <- subsetGrid(grid, runtime = k)
             grm <- lapply(1:n.mem, function(x) {
-                  grl <- subsetGrid(grid, members = x)
+                  grl <- redim(subsetGrid(grid, members = x), member = FALSE, loc = loc)
                   dimNames.sub <- getDim(grl)
                   if (loc) {
                         dat <- grl$Data
