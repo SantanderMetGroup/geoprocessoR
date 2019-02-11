@@ -31,7 +31,6 @@
 #' @importFrom abind abind
 #' @import transformeR
 #' @examples
-#' require("transformeR")
 #' data("VALUE_Iberia_pr")
 #' plot(getCoordinates(VALUE_Iberia_pr))
 #' grid <- projectGrid(VALUE_Iberia_pr,

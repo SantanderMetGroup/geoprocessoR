@@ -21,7 +21,6 @@ Defines and/or transforms the projection of a grid (or station data) by means of
 This function uses \code{\link{spTransform}},  \code{\link{CRS}} and \code{\link{proj4string}} from package \pkg{sp}
 }
 \examples{
-require("transformeR")
 data("VALUE_Iberia_pr")
 plot(getCoordinates(VALUE_Iberia_pr))
 grid <- projectGrid(VALUE_Iberia_pr,
@@ -35,8 +34,8 @@ grid <- projectGrid(EOBS_Iberia_pr,
                     original.CRS = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0",
                     new.CRS = "+init=epsg:28992")
 plot(get2DmatCoordinates(grid))
-require(visualizeR)
-spatialPlot(climatology(grid))
+#require(visualizeR)
+#spatialPlot(climatology(grid))
 }
 \seealso{
 \code{\link{spTransform}}, \code{\link{proj4string}}.
