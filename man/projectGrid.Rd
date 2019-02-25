@@ -34,8 +34,8 @@ grid <- projectGrid(EOBS_Iberia_pr,
                     original.CRS = "+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0",
                     new.CRS = "+init=epsg:28992")
 plot(get2DmatCoordinates(grid))
-#require(visualizeR)
-#spatialPlot(climatology(grid))
+require(visualizeR)
+spatialPlot(climatology(grid))
 }
 \seealso{
 \code{\link{spTransform}}, \code{\link{proj4string}}.

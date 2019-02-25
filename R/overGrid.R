@@ -23,7 +23,7 @@
 #' @param layer SpatialPolygons object from which the geometries or attributes are 
 #' queried (type \code{help(package = "sp")}.
 #' @param subset Logical (default is FALSE). If TRUE, spatial subsetting is performed over
-#' the imput grid using the bounding coordinates of argument 'layer'.
+#' the imput grid. Otherwise, grid-boxes outside \code{layer} are assigned as NA.
 #' 
 #' @details All grid locations outside layer are filled with NAs. 
 #' 
@@ -78,17 +78,22 @@ overGrid <- function(grid, layer, subset = FALSE) {
                         dat <- array3Dto2Dmat(grl$Data)
                   }
                   a <- sp::SpatialPointsDataFrame(cbind(coords[,2], coords[,1]), data.frame(t(dat)))
-                  a[which(is.na(over(a, layer))),] <- NA 
+                  if (subset) {
+                    a <- a[which(!is.na(over(a, layer))),]
+                  } else {
+                    a[which(is.na(over(a, layer))),] <- NA 
+                  }
+                  coords <- as.data.frame(coordinates(a))
+                  colnames(coords) <- c("x", "y")
                   if (loc) {
                         grl$Data <- unname(as.matrix(t(a@data)))
+                        grl$xyCoords <- coords
                   } else {
-                        grl$Data <- mat2Dto3Darray(t(a@data), getCoordinates(grl)$x, getCoordinates(grl)$y)
+                        grl$Data <- mat2Dto3Darray(t(a@data), unique(coords$x), unique(coords$y))
+                        grl$xyCoords$x <- unique(coords$x)
+                        grl$xyCoords$y <- unique(coords$y)
                   }
                   attr(grl$Data, "dimensions") <- dimNames.sub
-                  if (subset) {
-                        grl <- subsetGrid(grl, lonLim = bbox(layer)[1,], 
-                                    latLim = bbox(layer)[2,], outside = TRUE)
-                  }
                   grl
             })
             if (n.mem > 1) {
