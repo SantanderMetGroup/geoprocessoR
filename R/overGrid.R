@@ -36,8 +36,6 @@
 #' @author M. Iturbide
 #' @family subsetting
 #' @export
-#' @examples
-
 
 overGrid <- function(grid, layer, subset = FALSE) {
       # commented lines are for posible runtime dimension consideration,
