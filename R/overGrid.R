@@ -29,7 +29,7 @@
 #' 
 #' @return A grid or station data.
 #' 
-#' @importFrom sp over bbox SpatialPoints
+#' @importFrom sp over bbox SpatialPoints CRS
 #' @import transformeR 
 #' 
 #' @return A grid
@@ -77,7 +77,8 @@ overGrid <- function(grid, layer, subset = FALSE) {
                   } else {
                         dat <- array3Dto2Dmat(grl$Data)
                   }
-                  a <- sp::SpatialPointsDataFrame(cbind(coords[,2], coords[,1]), data.frame(t(dat)))
+                  a <- sp::SpatialPointsDataFrame(cbind(coords[,2], coords[,1]), data.frame(t(dat)), 
+                                                  proj4string = CRS(attr(grl$xyCoords, "projection")@projargs))
                   if (subset) {
                     a <- a[which(!is.na(over(a, layer))),]
                   } else {

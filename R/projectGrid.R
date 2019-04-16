@@ -94,7 +94,7 @@ projectGrid <- function(grid,
                         grid <- redim(grid, member = TRUE, runtime = TRUE)
                         data.aux1 <- lapply(1:getShape(grid)["runtime"], function(r) {
                               data.aux0 <- lapply(1:getShape(grid)["member"], function(m) {
-                                    array3Dto2Dmat(subsetGrid(grid, runtime = r, members = 1)$Data)
+                                    array3Dto2Dmat(subsetGrid(grid, runtime = r, members = m)$Data)
                               })
                               do.call("abind", list(data.aux0, along = 0))
                         })
