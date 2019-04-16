@@ -13,7 +13,7 @@ overGrid(grid, layer, subset = FALSE)
 queried (type \code{help(package = "sp")}.}
 
 \item{subset}{Logical (default is FALSE). If TRUE, spatial subsetting is performed over
-the imput grid using the bounding coordinates of argument 'layer'.}
+the imput grid. Otherwise, grid-boxes outside \code{layer} are assigned as NA.}
 }
 \value{
 A grid or station data.
@@ -46,3 +46,4 @@ spatialPlot(climatology(ovs), sp.layout = list(IP, first = FALSE))
 \author{
 M. Iturbide
 }
+\concept{subsetting}

@@ -12,8 +12,8 @@ Suggests:
     visualizeR
 Type: Package
 Title: An R package for geoprocessing climate4R data 
-Version: 0.0.0
-Date: 2018-08-15
+Version: 0.1.0
+Date: 2019-04-16
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [cph]",
     "Joaquin Bedia <bediaj@unican.es> [aut]",
@@ -24,4 +24,4 @@ Encoding: UTF-8
 Description: Tools for climate data geoprocessing. It is a building block of the climate4R Bundle <http://www.meteo.unican.es/climate4R>). 
 License: file LICENSE
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

@@ -21,7 +21,6 @@ Defines and/or transforms the projection of a grid (or station data) by means of
 This function uses \code{\link{spTransform}},  \code{\link{CRS}} and \code{\link{proj4string}} from package \pkg{sp}
 }
 \examples{
-require("transformeR")
 data("VALUE_Iberia_pr")
 plot(getCoordinates(VALUE_Iberia_pr))
 grid <- projectGrid(VALUE_Iberia_pr,
