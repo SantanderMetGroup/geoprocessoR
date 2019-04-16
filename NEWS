@@ -6,4 +6,7 @@ See the [Releases section](https://github.com/SantanderMetGroup/geoprocessoR/rel
 
 * First release
 
+## v0.1.0 (16 Apr 2019)
 
+* Bug fix in projectGrid (afecting multimember grids)
+* Other minor changes and enhancements
