@@ -1,22 +1,30 @@
 Package: geoprocessoR
 Depends:
     R(>= 3.1.0),
-    transformeR
+    transformeR,
+    visualizeR
 Imports:
     sp,
-    abind
+    abind,
+    maps,
+    maptools,
+    rgeos,
+    RColorBrewer,
+    grDevices,
+    gdalUtils,
+    rgdal
 Suggests:
     downscaleR,      
     loadeR,
     loadeR.ECOMS,
-    visualizeR
 Type: Package
 Title: An R package for geoprocessing climate4R data 
-Version: 0.1.0
+Version: 0.2.0
 Date: 2019-04-16
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [cph]",
     "Joaquin Bedia <bediaj@unican.es> [aut]",
+    "Ana Casanueva <ana.casanueva@unican.es> [aut]",
     "Maialen Iturbide <miturbide@ifca.unican.es> [aut, cre]"))
 BugReports: https://github.com/SantanderMetGroup/geoprocesseR/issues
 URL: in construction

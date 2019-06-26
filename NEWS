@@ -10,3 +10,7 @@ See the [Releases section](https://github.com/SantanderMetGroup/geoprocessoR/rel
 
 * Bug fix in projectGrid (afecting multimember grids)
 * Other minor changes and enhancements
+
+## v0.2.0 (25 June 2019)
+
+* Inlude plot map in polar stereographic projection.
