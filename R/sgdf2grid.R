@@ -1,12 +1,12 @@
 #'@title Convert a SpatialGridDataFrame to a C4R grid
 #'@description Convert a SpatialGridDataFrame (package \pkg{sp}) to a C4R grid
-#'@param agdf A SpatialGridDataFrame, as returned by function...(to be completed)
-#'@param varName Character
-#'@param level Character
-#'@param dates Named list of the form: list(start = NULL, end = NULL)
-#'@param metadata Named list of characters
+#'@param sgdf A SpatialGridDataFrame, as returned by function \code{gdalwarp} (package \pkg{gdalUtils}).
+#'@param varName Character with the variable name for the resulting grid.
+#'@param level Character with the level for the resulting grid.
+#'@param dates Named list of the form: list(start = NULL, end = NULL), for the resulting grid.
+#'@param metadata Named list of characters with furher metadata for the resulting grid.
 #'@seealso \code{\link[transformeR]{clim2sgdf}}
-#'@return A grid 
+#'@return A C4R grid, with the metadata specified by the input arguments.
 #'@keywords internal
 #'@author M. Iturbide
 #'@export

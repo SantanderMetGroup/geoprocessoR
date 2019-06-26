@@ -113,7 +113,7 @@ spatialPlotStereo <- function(data, original.CRS="+init=epsg:4326", new.CRS="+in
   # *** READ NEW IMAGE ***
   n <- rgdal::readGDAL(newf)
   arg.list[["obj"]] <- n
-  
+
   # *** PLOT DATA ***
   if(backdrop.theme=="coastline"){
   

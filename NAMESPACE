@@ -26,10 +26,7 @@ importFrom(sp,coordinates)
 importFrom(sp,over)
 importFrom(sp,proj4string)
 importFrom(sp,spTransform)
-<<<<<<< HEAD
-importFrom(transformeR,mat2Dto3Darray)
-=======
 importFrom(sp,spplot)
->>>>>>> devel
+importFrom(transformeR,mat2Dto3Darray)
 importFrom(utils,globalVariables)
 importFrom(utils,packageDescription)
