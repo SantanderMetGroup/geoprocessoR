@@ -53,8 +53,8 @@
 projectGrid <- function(grid,
                         original.CRS = "",
                         new.CRS = "") {
-      original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Non-valid original.CRS argument")})
-      new.CRS <- tryCatch({CRS(new.CRS)}, error = function(err) {stop("Non-valid new.CRS argument")})
+      if (class(original.CRS) != "CRS") original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Non-valid original.CRS argument")})
+      if (class(new.CRS) != "CRS") new.CRS <- tryCatch({CRS(new.CRS)}, error = function(err) {stop("Non-valid new.CRS argument")})
       orig.datum <- attr(grid$xyCoords, "projection")
       # if (orig.datum == "RotatedPole") stop("This function is not applicable to this projection. See Details")
       if (!is.null(orig.datum) & !is.na(original.CRS)) {
