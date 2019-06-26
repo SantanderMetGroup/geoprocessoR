@@ -8,18 +8,18 @@ sgdf2grid(sgdf, varName = NULL, level = NULL, dates = list(start =
   NULL, end = NULL), metadata = NULL)
 }
 \arguments{
-\item{varName}{Character}
+\item{sgdf}{A SpatialGridDataFrame, as returned by function \code{gdalwarp} (package \pkg{gdalUtils}).}
 
-\item{level}{Character}
+\item{varName}{Character with the variable name for the resulting grid.}
 
-\item{dates}{Named list of the form: list(start = NULL, end = NULL)}
+\item{level}{Character with the level for the resulting grid.}
 
-\item{metadata}{Named list of characters}
+\item{dates}{Named list of the form: list(start = NULL, end = NULL), for the resulting grid.}
 
-\item{agdf}{A SpatialGridDataFrame, as returned by function...(to be completed)}
+\item{metadata}{Named list of characters with furher metadata for the resulting grid.}
 }
 \value{
-A grid
+A C4R grid, with the metadata specified by the input arguments.
 }
 \description{
 Convert a SpatialGridDataFrame (package \pkg{sp}) to a C4R grid
