@@ -2,7 +2,6 @@ Package: geoprocessoR
 Depends:
     R(>= 3.1.0),
     transformeR,
-    visualizeR
 Imports:
     sp,
     abind,
@@ -17,10 +16,11 @@ Suggests:
     downscaleR,      
     loadeR,
     loadeR.ECOMS,
+    visualizeR
 Type: Package
 Title: An R package for geoprocessing climate4R data 
 Version: 0.2.0
-Date: 2019-04-16
+Date: 2019-06-25
 Authors@R: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [cph]",
     "Joaquin Bedia <bediaj@unican.es> [aut]",
