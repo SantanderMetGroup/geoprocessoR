@@ -21,11 +21,12 @@ Type: Package
 Title: An R package for geoprocessing climate4R data 
 Version: 0.2.0
 Date: 2019-04-16
-Authors@R: as.person(c(
+Author: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [cph]",
     "Joaquin Bedia <bediaj@unican.es> [aut]",
     "Ana Casanueva <ana.casanueva@unican.es> [aut]",
     "Maialen Iturbide <miturbide@ifca.unican.es> [aut, cre]"))
+Maintainer: "Maialen Iturbide <miturbide@ifca.unican.es>"
 BugReports: https://github.com/SantanderMetGroup/geoprocesseR/issues
 URL: in construction
 Encoding: UTF-8
