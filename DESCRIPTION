@@ -5,11 +5,6 @@ Depends:
 Imports:
     sp,
     abind,
-    maps,
-    maptools,
-    rgeos,
-    RColorBrewer,
-    grDevices,
     gdalUtils,
     rgdal
 Suggests:
@@ -20,18 +15,13 @@ Suggests:
 Type: Package
 Title: An R package for geoprocessing climate4R data 
 Version: 0.2.0
-<<<<<<< HEAD
-Date: 2019-04-16
-Author: as.person(c(
-=======
 Date: 2019-06-25
-Authors@R: as.person(c(
->>>>>>> devel
+Author: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [cph]",
     "Joaquin Bedia <bediaj@unican.es> [aut]",
     "Ana Casanueva <ana.casanueva@unican.es> [aut]",
     "Maialen Iturbide <miturbide@ifca.unican.es> [aut, cre]"))
-Maintainer: "Maialen Iturbide <miturbide@ifca.unican.es>"
+Maintainer: Maialen Iturbide <miturbide@ifca.unican.es>
 BugReports: https://github.com/SantanderMetGroup/geoprocesseR/issues
 URL: in construction
 Encoding: UTF-8
