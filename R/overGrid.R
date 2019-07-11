@@ -41,6 +41,7 @@ overGrid <- function(grid, layer, subset = FALSE) {
       # commented lines are for posible runtime dimension consideration,
       # in which case function bindGrid.runtime should be created
       # grid <- redim(grid, runtime = TRUE)
+      if (subset) grid <- subsetGrid(grid, lonLim = bbox(layer)[1,], latLim = bbox(layer)[2,], outside = TRUE)
       loc <- "loc" %in% getDim(grid)
       grid <- redim(grid, loc = loc)
       # n.run <- getShape(grid)["runtime"]
@@ -61,12 +62,10 @@ overGrid <- function(grid, layer, subset = FALSE) {
                         dat <- array3Dto2Dmat(grl$Data)
                   }
                   a <- sp::SpatialPointsDataFrame(cbind(coords[,2], coords[,1]), data.frame(t(dat)), 
-                                                  proj4string = CRS(attr(grl$xyCoords, "projection")@projargs))
-                  if (subset) {
-                    a <- a[which(!is.na(over(a, layer))),]
-                  } else {
-                    a[which(is.na(over(a, layer))),] <- NA 
-                  }
+                                                  proj4string = CRS(attr(grl$xyCoords, "projection")))
+                  a[which(is.na(over(a, layer))),] <- NA 
+                  if (subset & loc) a <- a[which(!is.na(over(a, layer))),]
+                    
                   coords <- as.data.frame(coordinates(a))
                   colnames(coords) <- c("x", "y")
                   if (loc) {

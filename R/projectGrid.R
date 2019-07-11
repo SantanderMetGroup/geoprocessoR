@@ -53,12 +53,15 @@
 projectGrid <- function(grid,
                         original.CRS = "",
                         new.CRS = "") {
+      orig.datum <- attr(grid$xyCoords, "projection")
       if (class(original.CRS) != "CRS") original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Non-valid original.CRS argument")})
       if (class(new.CRS) != "CRS") new.CRS <- tryCatch({CRS(new.CRS)}, error = function(err) {stop("Non-valid new.CRS argument")})
-      orig.datum <- attr(grid$xyCoords, "projection")
       # if (orig.datum == "RotatedPole") stop("This function is not applicable to this projection. See Details")
       if (!is.null(orig.datum) & !is.na(original.CRS)) {
             warning("CAUTION! Grid with previusly defined projection: ", orig.datum)
+            attr(grid$xyCoords, "projection") <- as.character(original.CRS)
+      } else if (is.null(orig.datum) & !is.na(original.CRS)) {
+            attr(grid$xyCoords, "projection") <- as.character(original.CRS)
       } else if (is.null(orig.datum) & is.na(original.CRS)) {
             stop("Please define original.CRS")
       } else if (!is.null(orig.datum) & is.na(original.CRS)) {
@@ -103,12 +106,12 @@ projectGrid <- function(grid,
                         grid <- redim(redim(grid, drop = T), member = FALSE, loc = TRUE)
                   }
                   grid$xyCoords <- as.data.frame(new.coords)
-                  attr(grid$xyCoords, "projection") <- new.CRS
+                  attr(grid$xyCoords, "projection") <- as.character(new.CRS)
                   attr(grid$xyCoords, "resX") <- 0
                   attr(grid$xyCoords, "resY") <- 0
             } else {
                   grid$xyCoords <- list("x" = unique(new.coords[,1]), "y" = unique(new.coords[,2]))
-                  attr(grid$xyCoords, "projection") <- new.CRS
+                  attr(grid$xyCoords, "projection") <- as.character(new.CRS)
                   attr(grid$xyCoords, "resX") <- xdists[[1]]
                   attr(grid$xyCoords, "resY") <- ydists[[1]]
             }
