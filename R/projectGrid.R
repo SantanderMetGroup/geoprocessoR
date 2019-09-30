@@ -53,71 +53,71 @@
 projectGrid <- function(grid,
                         original.CRS = "",
                         new.CRS = "") {
-      orig.datum <- attr(grid$xyCoords, "projection")
-      if (class(original.CRS) != "CRS") original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Non-valid original.CRS argument")})
-      if (class(new.CRS) != "CRS") new.CRS <- tryCatch({CRS(new.CRS)}, error = function(err) {stop("Non-valid new.CRS argument")})
-      # if (orig.datum == "RotatedPole") stop("This function is not applicable to this projection. See Details")
-      if (!is.null(orig.datum) & !is.na(original.CRS)) {
-            warning("CAUTION! Grid with previusly defined projection: ", orig.datum)
-            attr(grid$xyCoords, "projection") <- as.character(original.CRS)
-      } else if (is.null(orig.datum) & !is.na(original.CRS)) {
-            attr(grid$xyCoords, "projection") <- as.character(original.CRS)
-      } else if (is.null(orig.datum) & is.na(original.CRS)) {
-            stop("Please define original.CRS")
-      } else if (!is.null(orig.datum) & is.na(original.CRS)) {
-            original.CRS <- orig.datum
-            if (class(original.CRS) == "character") 
-                  original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Grid with non-valid defined projection. Please, use argument original.CRS to redefine it correctly")})
-      } 
-      data <- get2DmatCoordinates(grid)
-      sppoints <- SpatialPoints(data)
-      sp::proj4string(sppoints) <- original.CRS
-      message("[",Sys.time(), "] ", "Arguments of the original projection defined as ", original.CRS)
-      if (!is.na(new.CRS)) {
-            message("[",Sys.time(), "] ", "Projecting..")
-            sppoints.new <- spTransform(sppoints, new.CRS)
-            new.coords <- coordinates(sppoints.new)
-            x <- unique(new.coords[,1])
-            y <- unique(new.coords[,2])
-            if (length(x) > 1 & length(y) > 1) { # a single location?
-                  xdists <- lapply(1:(length(x) - 1), function(l) {
-                        x[l + 1] - x[l]
-                  })
-                  ydists <- lapply(1:(length(y) - 1), function(l) {
-                        y[l + 1] - y[l]
-                  })
-                  xa <- sum(unlist(xdists) - unlist(xdists)[1])
-                  ya <- sum(unlist(ydists) - unlist(ydists)[1])
-                  cond <- any(abs(c(xa, ya)) > 1e-05) # regular coordinates?
-            } else {
-                  cond <- TRUE # a single location considered as irregular
-            }
-            if (cond) {
-                  if (isRegular(grid)) { 
-                        grid <- redim(grid, member = TRUE, runtime = TRUE)
-                        data.aux1 <- lapply(1:getShape(grid)["runtime"], function(r) {
-                              data.aux0 <- lapply(1:getShape(grid)["member"], function(m) {
-                                    array3Dto2Dmat(subsetGrid(grid, runtime = r, members = m)$Data)
-                              })
-                              do.call("abind", list(data.aux0, along = 0))
-                        })
-                        grid$Data <-  do.call("abind", list(data.aux1, along = 0))
-                        attr(grid$Data, "dimensions") <- c("runtime", "member", "time", "loc")
-                        grid <- redim(redim(grid, drop = T), member = FALSE, loc = TRUE)
-                  }
-                  grid$xyCoords <- as.data.frame(new.coords)
-                  attr(grid$xyCoords, "projection") <- as.character(new.CRS)
-                  attr(grid$xyCoords, "resX") <- 0
-                  attr(grid$xyCoords, "resY") <- 0
-            } else {
-                  grid$xyCoords <- list("x" = unique(new.coords[,1]), "y" = unique(new.coords[,2]))
-                  attr(grid$xyCoords, "projection") <- as.character(new.CRS)
-                  attr(grid$xyCoords, "resX") <- xdists[[1]]
-                  attr(grid$xyCoords, "resY") <- ydists[[1]]
-            }
-            message("[",Sys.time(), "] ", "Done.")
+  orig.datum <- attr(grid$xyCoords, "projection")
+  if (class(original.CRS) != "CRS") original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Non-valid original.CRS argument")})
+  if (class(new.CRS) != "CRS") new.CRS <- tryCatch({CRS(new.CRS)}, error = function(err) {stop("Non-valid new.CRS argument")})
+  # if (orig.datum == "RotatedPole") stop("This function is not applicable to this projection. See Details")
+  if (!is.null(orig.datum) & !is.na(original.CRS)) {
+    warning("CAUTION! Grid with previusly defined projection: ", orig.datum)
+    attr(grid$xyCoords, "projection") <- as.character(original.CRS)
+  } else if (is.null(orig.datum) & !is.na(original.CRS)) {
+    attr(grid$xyCoords, "projection") <- as.character(original.CRS)
+  } else if (is.null(orig.datum) & is.na(original.CRS)) {
+    stop("Please define original.CRS")
+  } else if (!is.null(orig.datum) & is.na(original.CRS)) {
+    original.CRS <- orig.datum
+    if (class(original.CRS) == "character") 
+      original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Grid with non-valid defined projection. Please, use argument original.CRS to redefine it correctly")})
+  } 
+  data <- get2DmatCoordinates(grid)
+  sppoints <- SpatialPoints(data)
+  sp::proj4string(sppoints) <- original.CRS
+  message("[",Sys.time(), "] ", "Arguments of the original projection defined as ", original.CRS)
+  if (!is.na(new.CRS)) {
+    message("[",Sys.time(), "] ", "Projecting..")
+    sppoints.new <- spTransform(sppoints, new.CRS)
+    new.coords <- coordinates(sppoints.new)
+    x <- unique(new.coords[,1])
+    y <- unique(new.coords[,2])
+    if (length(x) > 1 & length(y) > 1) { # a single location?
+      xdists <- lapply(1:(length(x) - 1), function(l) {
+        x[l + 1] - x[l]
+      })
+      ydists <- lapply(1:(length(y) - 1), function(l) {
+        y[l + 1] - y[l]
+      })
+      xa <- sum(unlist(xdists) - unlist(xdists)[1])
+      ya <- sum(unlist(ydists) - unlist(ydists)[1])
+      cond <- any(abs(c(xa, ya)) > 1e-05) # regular coordinates?
+    } else {
+      cond <- TRUE # a single location considered as irregular
+    }
+    if (cond) {
+      if (isRegular(grid)) { 
+        grid <- redim(grid, member = TRUE, runtime = TRUE)
+        data.aux1 <- lapply(1:getShape(grid)["runtime"], function(r) {
+          data.aux0 <- lapply(1:getShape(grid)["member"], function(m) {
+            array3Dto2Dmat(redim(subsetGrid(grid, runtime = r, members = m), member = FALSE)$Data)
+          })
+          do.call("abind", list(data.aux0, along = 0))
+        })
+        grid$Data <-  do.call("abind", list(data.aux1, along = 0))
+        attr(grid$Data, "dimensions") <- c("runtime", "member", "time", "loc")
+        grid <- redim(redim(grid, drop = T), member = FALSE, loc = TRUE)
       }
-      return(grid)
+      grid$xyCoords <- as.data.frame(new.coords)
+      attr(grid$xyCoords, "projection") <- as.character(new.CRS)
+      attr(grid$xyCoords, "resX") <- 0
+      attr(grid$xyCoords, "resY") <- 0
+    } else {
+      grid$xyCoords <- list("x" = unique(new.coords[,1]), "y" = unique(new.coords[,2]))
+      attr(grid$xyCoords, "projection") <- as.character(new.CRS)
+      attr(grid$xyCoords, "resX") <- xdists[[1]]
+      attr(grid$xyCoords, "resY") <- ydists[[1]]
+    }
+    message("[",Sys.time(), "] ", "Done.")
+  }
+  return(grid)
 }
-                        
+
 #end
