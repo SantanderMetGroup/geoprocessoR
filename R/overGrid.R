@@ -62,7 +62,7 @@ overGrid <- function(grid, layer, subset = FALSE) {
                         dat <- array3Dto2Dmat(grl$Data)
                   }
                   a <- sp::SpatialPointsDataFrame(cbind(coords[,2], coords[,1]), data.frame(t(dat)), 
-                                                  proj4string = CRS(attr(grl$xyCoords, "projection")))
+                                                  proj4string = CRS(attr(grl$xyCoords, "projection")), match.ID = FALSE)
                   a[which(is.na(over(a, layer))),] <- NA 
                   if (subset & loc) a <- a[which(!is.na(over(a, layer))),]
                     
