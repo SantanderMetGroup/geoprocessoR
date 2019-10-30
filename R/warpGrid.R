@@ -27,7 +27,8 @@
 #' @details   
 #'  \strong{int.method}
 #'  
-#'  By default bilinear interpolation is applied to get a complete grid in the target projection. Other options are "near", "cubic", "cubicspline", etc., corresponding to the argument \code{r} in \code{ gdalUtils::gdalwarp}.
+#'  By default bilinear interpolation is applied to get a complete grid in the target projection. Other options are \code{"near"}, \code{"cubic"},
+#'   \code{"cubicspline"} etc., passed to the argument \code{r} in \code{gdalUtils::gdalwarp}.
 
 #' @export
 #' @importFrom sp spplot spTransform CRS 
@@ -46,11 +47,15 @@
 
 
 
-warpGrid <- function(data, original.CRS="+init=epsg:4326", new.CRS="+init=epsg:3995", 
-                              int.method="bilinear"){
-
-
-
+warpGrid <- function(data,
+                     original.CRS = "+init=epsg:4326",
+                     new.CRS = "+init=epsg:3995", 
+                     int.method = "bilinear") {
+  
+  # *** Check for members ***
+  nmem <- getShape(data, "member")
+  member <- ifelse((nmem == 1 | is.na(nmem)), FALSE, TRUE)
+                     
   # *** CONVERT GRID TO A SpatialPointsDataFrame ***
   pattern <- transformeR::grid2sp(data)
   
@@ -63,15 +68,15 @@ warpGrid <- function(data, original.CRS="+init=epsg:4326", new.CRS="+init=epsg:3
   gdalUtils::gdalwarp(srcfile = outf,
                     s_srs = original.CRS,
                     t_srs = new.CRS, dstfile = newf,
-                    r=int.method)
+                    r = int.method)
   
   # *** READ NEW IMAGE ***
   n <- rgdal::readGDAL(newf)
  
   # *** sp2grid ***
-  grid <- transformeR::sp2grid(sp = n)
+  grid <- transformeR::sp2grid(sp = n, member = member)
   
-  rm(outf, newf)
+  outf <- newf <- NULL
   return(grid)
 
 }

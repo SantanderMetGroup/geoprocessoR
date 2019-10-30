@@ -25,7 +25,8 @@ Warp grid to allow plotting in a different projection.
 \details{
 \strong{int.method}
  
- By default bilinear interpolation is applied to get a complete grid in the target projection. Other options are "near", "cubic", "cubicspline", etc., corresponding to the argument \code{r} in \code{ gdalUtils::gdalwarp}.
+ By default bilinear interpolation is applied to get a complete grid in the target projection. Other options are \code{"near"}, \code{"cubic"},
+  \code{"cubicspline"} etc., passed to the argument \code{r} in \code{gdalUtils::gdalwarp}.
 }
 \examples{
 data(ncep_hgt500_2000)
