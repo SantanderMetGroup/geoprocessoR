@@ -15,16 +15,20 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#' @title Warp grid to allow plotting in a different projection.
+#' @title Grid warping
 #' @description Warp grid to allow plotting in a different projection.
 #' @param data A C4R grid (or multimember C4R grid) object, or climatology C4R grid.
-#' @param original.CRS character as passed to function \code{\link{CRS}} with the original projection. Default: longlat projection.
-#' @param new.CRS character as passed to function \code{\link{CRS}} with the target projection. Default: polar stereographic projection.
-#' @param int.method character with the interpolation method in the new projection. Default: "bilinear". See details.
+#' @param original.CRS character as passed to function \code{\link{CRS}} with the original projection. 
+#' Default to longlat projection (\code{"+init=epsg:4326"}).
+#' @param new.CRS character string, as passed to function \code{\link{CRS}}, specifying the target projection. 
+#' Default to polar stereographic projection (\code{"+init=epsg:3995"}).
+#' @param int.method Resampling method. Default to \code{"bilinear"}. See details.
 #' 
 #' @return Warped grid with the structure of a C4R grid.
 #' 
-#' @details   
+#' @details 
+#' This function is a wrapper of the gdal warping capabilities via gdalwarp.  
+#' 
 #'  \strong{int.method}
 #'  
 #'  By default bilinear interpolation is applied to get a complete grid in the target projection. Other options are \code{"near"}, \code{"cubic"},
@@ -43,9 +47,7 @@
 #' library(visualizeR)
 #' l1 <- get(load(paste0(find.package("visualizeR"), "/countries.rda"))) # world coastline
 #' l1 <- sp::spTransform(l1[[2]], CRSobj = attr(grid$xyCoords, "projection"))
-#' visualizeR::spatialPlot(grid, sp.layout = list(list(l1, first = FALSE)))
-
-
+#' visualizeR::spatialPlot(grid, sp.layout = list(list(l1, first = FALSE))
 
 warpGrid <- function(data,
                      original.CRS = "+init=epsg:4326",
@@ -55,29 +57,39 @@ warpGrid <- function(data,
   # *** Check for members ***
   nmem <- getShape(data, "member")
   member <- ifelse((nmem == 1 | is.na(nmem)), FALSE, TRUE)
-                     
+  
   # *** CONVERT GRID TO A SpatialPointsDataFrame ***
   pattern <- transformeR::grid2sp(data)
   
   # *** WRITE A GDAL GRID MAP ***
   outf <- tempfile(fileext = ".tif")
-  rgdal::writeGDAL(pattern, fname = outf, drivername = "GTiff", mvFlag = "NA")
+  suppressWarnings(
+    rgdal::writeGDAL(pattern, fname = outf, drivername = "GTiff", mvFlag = "NA")
+  )
   
   # *** IMAGE RE-PROJECTION ***
   newf <- tempfile(fileext = ".tif")
-  gdalUtils::gdalwarp(srcfile = outf,
-                    s_srs = original.CRS,
-                    t_srs = new.CRS, dstfile = newf,
-                    r = int.method)
-  
+  suppressMessages(
+    gdalUtils::gdalwarp(srcfile = outf,
+                        s_srs = original.CRS,
+                        t_srs = new.CRS,
+                        dstfile = newf,
+                        r = int.method)
+  )
   # *** READ NEW IMAGE ***
   n <- rgdal::readGDAL(newf)
- 
-  # *** sp2grid ***
-  grid <- transformeR::sp2grid(sp = n, member = member)
-  
   outf <- newf <- NULL
+  
+  # *** sp2grid ***
+  start <- getRefDates(data, which = "start")
+  end <- getRefDates(data, which = "end")
+  
+  grid <- transformeR::sgdf2clim(sp = n,
+                                 member = member,
+                                 varName = getVarNames(data),
+                                 level = getGridVerticalLevels(data),
+                                 dates = list(start = start, end = end),
+                                 season = getSeason(data))
   return(grid)
-
 }
 
