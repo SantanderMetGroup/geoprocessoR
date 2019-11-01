@@ -2,7 +2,7 @@
 % Please edit documentation in R/warpGrid.R
 \name{warpGrid}
 \alias{warpGrid}
-\title{Warp grid to allow plotting in a different projection.}
+\title{Grid warping}
 \usage{
 warpGrid(data, original.CRS = "+init=epsg:4326",
   new.CRS = "+init=epsg:3995", int.method = "bilinear")
@@ -10,11 +10,13 @@ warpGrid(data, original.CRS = "+init=epsg:4326",
 \arguments{
 \item{data}{A C4R grid (or multimember C4R grid) object, or climatology C4R grid.}
 
-\item{original.CRS}{character as passed to function \code{\link{CRS}} with the original projection. Default: longlat projection.}
+\item{original.CRS}{character as passed to function \code{\link{CRS}} with the original projection. 
+Default to longlat projection (\code{"+init=epsg:4326"}).}
 
-\item{new.CRS}{character as passed to function \code{\link{CRS}} with the target projection. Default: polar stereographic projection.}
+\item{new.CRS}{character string, as passed to function \code{\link{CRS}}, specifying the target projection. 
+Default to polar stereographic projection (\code{"+init=epsg:3995"}).}
 
-\item{int.method}{character with the interpolation method in the new projection. Default: "bilinear". See details.}
+\item{int.method}{Resampling method. Default to \code{"bilinear"}. See details.}
 }
 \value{
 Warped grid with the structure of a C4R grid.
@@ -23,7 +25,9 @@ Warped grid with the structure of a C4R grid.
 Warp grid to allow plotting in a different projection.
 }
 \details{
-\strong{int.method}
+This function is a wrapper of the gdal warping capabilities via gdalwarp.  
+
+ \strong{int.method}
  
  By default bilinear interpolation is applied to get a complete grid in the target projection. Other options are \code{"near"}, \code{"cubic"},
   \code{"cubicspline"} etc., passed to the argument \code{r} in \code{gdalUtils::gdalwarp}.
@@ -35,7 +39,7 @@ grid <- warpGrid(climatology(ncep_hgt500_2000))
 library(visualizeR)
 l1 <- get(load(paste0(find.package("visualizeR"), "/countries.rda"))) # world coastline
 l1 <- sp::spTransform(l1[[2]], CRSobj = attr(grid$xyCoords, "projection"))
-visualizeR::spatialPlot(grid, sp.layout = list(list(l1, first = FALSE)))
+visualizeR::spatialPlot(grid, sp.layout = list(list(l1, first = FALSE))
 }
 \author{
 A. Casanueva, J. Bedia, M. Iturbide

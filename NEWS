@@ -15,3 +15,7 @@ See the [Releases section](https://github.com/SantanderMetGroup/geoprocessoR/rel
 
 * Inlude plot map in polar stereographic projection.
 * spatialPlotStereo > warpGrid : auxiliary function to plot in ppolar stereographic projection.
+
+## v0.3.0 (31 Oct 2019)
+
+* New `warpGrid` function for climatological grid warping
