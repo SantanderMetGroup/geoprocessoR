@@ -25,7 +25,7 @@ Maintainer: Maialen Iturbide <miturbide@ifca.unican.es>
 BugReports: https://github.com/SantanderMetGroup/geoprocesseR/issues
 URL: http://www.meteo.unican.es/climate4r
 Encoding: UTF-8
-Description: Tools for climate data geoprocessing. It is a building block of the climate4R Bundle <http://www.meteo.unican.es/climate4R>). 
+Description: Geoprocessing tools for climate4R <http://www.meteo.unican.es/climate4R>). 
 License: file LICENSE
 LazyData: true
 RoxygenNote: 6.1.1
