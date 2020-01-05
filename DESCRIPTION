@@ -14,7 +14,7 @@ Suggests:
     visualizeR
 Type: Package
 Title: An R package for geoprocessing climate4R data 
-Version: 0.2.1
+Version: 0.3.0
 Date: 2019-11-01
 Author: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [cph]",
