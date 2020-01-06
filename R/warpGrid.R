@@ -40,14 +40,14 @@
 #' @importFrom rgdal writeGDAL readGDAL
 #' @import transformeR
 #' @author A. Casanueva, J. Bedia, M. Iturbide
-#' @examples 
+#' @examples
 #' data(ncep_hgt500_2000)
 #' grid <- warpGrid(climatology(ncep_hgt500_2000))
 #' # Example of application: plot in polar stereographic projection
 #' library(visualizeR)
 #' l1 <- get(load(paste0(find.package("visualizeR"), "/countries.rda"))) # world coastline
 #' l1 <- sp::spTransform(l1[[2]], CRSobj = attr(grid$xyCoords, "projection"))
-#' visualizeR::spatialPlot(grid, sp.layout = list(list(l1, first = FALSE))
+#' visualizeR::spatialPlot(grid, sp.layout = list(list(l1, first = FALSE)))
 
 warpGrid <- function(data,
                      original.CRS = "+init=epsg:4326",
