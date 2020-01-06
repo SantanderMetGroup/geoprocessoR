@@ -11,11 +11,10 @@ See the [Releases section](https://github.com/SantanderMetGroup/geoprocessoR/rel
 * Bug fix in projectGrid (afecting multimember grids)
 * Other minor changes and enhancements
 
-## v0.2.0 (25 June 2019)
-
+## v0.2.0 (06 Jan 2020)
+* New `warpGrid` function for climatological grid warping
 * Inlude plot map in polar stereographic projection.
 * spatialPlotStereo > warpGrid : auxiliary function to plot in ppolar stereographic projection.
 
-## v0.3.0 (31 Oct 2019)
 
-* New `warpGrid` function for climatological grid warping
+
