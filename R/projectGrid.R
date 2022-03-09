@@ -31,6 +31,7 @@
 #' @importFrom abind abind
 #' @import transformeR
 #' @examples
+#' library(climate4R.datasets)
 #' data("VALUE_Iberia_pr")
 #' plot(getCoordinates(VALUE_Iberia_pr))
 #' grid <- projectGrid(VALUE_Iberia_pr,

@@ -41,6 +41,7 @@
 #' @import transformeR
 #' @author A. Casanueva, J. Bedia, M. Iturbide
 #' @examples
+#' library(climate4R.datasets)
 #' data(ncep_hgt500_2000)
 #' grid <- warpGrid(climatology(ncep_hgt500_2000))
 #' # Example of application: plot in polar stereographic projection
@@ -85,7 +86,6 @@ warpGrid <- function(data,
   end <- getRefDates(data, which = "end")
   
   grid <- transformeR::sgdf2clim(sp = n,
-                                 member = member,
                                  varName = getVarNames(data),
                                  level = getGridVerticalLevels(data),
                                  dates = list(start = start, end = end),
