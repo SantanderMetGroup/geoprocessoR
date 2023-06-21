@@ -16,5 +16,7 @@ See the [Releases section](https://github.com/SantanderMetGroup/geoprocessoR/rel
 * Inlude plot map in polar stereographic projection.
 * spatialPlotStereo > warpGrid : auxiliary function to plot in ppolar stereographic projection.
 
+## v0.2.1 (23 Jun 2023)
+* Mino updates
 
 
