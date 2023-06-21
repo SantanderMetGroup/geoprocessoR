@@ -4,8 +4,12 @@
 \alias{warpGrid}
 \title{Grid warping}
 \usage{
-warpGrid(data, original.CRS = "+init=epsg:4326",
-  new.CRS = "+init=epsg:3995", int.method = "bilinear")
+warpGrid(
+  data,
+  original.CRS = "+init=epsg:4326",
+  new.CRS = "+init=epsg:3995",
+  int.method = "bilinear"
+)
 }
 \arguments{
 \item{data}{A C4R grid (or multimember C4R grid) object, or climatology C4R grid.}
@@ -33,6 +37,7 @@ This function is a wrapper of the gdal warping capabilities via gdalwarp.
   \code{"cubicspline"} etc., passed to the argument \code{r} in \code{gdalUtils::gdalwarp}.
 }
 \examples{
+library(climate4R.datasets)
 data(ncep_hgt500_2000)
 grid <- warpGrid(climatology(ncep_hgt500_2000))
 # Example of application: plot in polar stereographic projection
