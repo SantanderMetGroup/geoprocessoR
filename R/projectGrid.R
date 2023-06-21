@@ -55,8 +55,8 @@ projectGrid <- function(grid,
                         original.CRS = "",
                         new.CRS = "") {
   orig.datum <- attr(grid$xyCoords, "projection")
-  if (class(original.CRS) != "CRS") original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Non-valid original.CRS argument")})
-  if (class(new.CRS) != "CRS") new.CRS <- tryCatch({CRS(new.CRS)}, error = function(err) {stop("Non-valid new.CRS argument")})
+  if (!"CRS" %in% class(original.CRS)) original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Non-valid original.CRS argument")})
+  if (!"CRS" %in% class(new.CRS)) new.CRS <- tryCatch({CRS(new.CRS)}, error = function(err) {stop("Non-valid new.CRS argument")})
   # if (orig.datum == "RotatedPole") stop("This function is not applicable to this projection. See Details")
   if (!is.null(orig.datum) & !is.na(original.CRS)) {
     warning("CAUTION! Grid with previusly defined projection: ", orig.datum)
@@ -67,7 +67,7 @@ projectGrid <- function(grid,
     stop("Please define original.CRS")
   } else if (!is.null(orig.datum) & is.na(original.CRS)) {
     original.CRS <- orig.datum
-    if (class(original.CRS) == "character") 
+    if (is.character(original.CRS)) 
       original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Grid with non-valid defined projection. Please, use argument original.CRS to redefine it correctly")})
   } 
   data <- get2DmatCoordinates(grid)
