@@ -9,7 +9,7 @@ The recommended installation procedure is to use the `install_github` command fr
 ```r
 devtools::install_github(c("SantanderMetGroup/transformeR", "SantanderMetGroup/geoprocessoR"))
 ```
-**NOTE:** Note that `transformeR` is a dependency for `geoprocessoR`. It also requires rgdal: `install.packages("rgdal")`. Note that `transformeR` also includes illustrative datasets for the `climate4R` framework.
+**NOTE:** Note that `transformeR` is a dependency for `geoprocessoR`. It also requires terra: `install.packages("terra")`. Note that `transformeR` also includes illustrative datasets for the `climate4R` framework.
 
 **EXAMPLE:** The following code shows an example of `climate4R` data projection for gridded data (see the [Wiki](https://github.com/SantanderMetGroup/geoprocessoR/wiki) for more worked examples).
 

@@ -29,12 +29,12 @@ Warped grid with the structure of a C4R grid.
 Warp grid to allow plotting in a different projection.
 }
 \details{
-This function is a wrapper of the gdal warping capabilities via gdalwarp.  
+This function uses terra projection capabilities for grid warping.  
 
  \strong{int.method}
  
  By default bilinear interpolation is applied to get a complete grid in the target projection. Other options are \code{"near"}, \code{"cubic"},
-  \code{"cubicspline"} etc., passed to the argument \code{r} in \code{gdalUtils::gdalwarp}.
+  \code{"cubicspline"} etc., passed to the argument \code{method} in \code{terra::project}.
 }
 \examples{
 library(climate4R.datasets)

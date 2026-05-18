@@ -27,17 +27,17 @@
 #' @return Warped grid with the structure of a C4R grid.
 #' 
 #' @details 
-#' This function is a wrapper of the gdal warping capabilities via gdalwarp.  
+#' This function uses terra projection capabilities for grid warping. 
 #' 
 #'  \strong{int.method}
 #'  
 #'  By default bilinear interpolation is applied to get a complete grid in the target projection. Other options are \code{"near"}, \code{"cubic"},
-#'   \code{"cubicspline"} etc., passed to the argument \code{r} in \code{gdalUtils::gdalwarp}.
+#'   \code{"cubicspline"} etc., passed to the argument \code{method} in \code{terra::project}.
 
 #' @export
 #' @importFrom sp spplot spTransform CRS 
 #' @importFrom gdalUtils gdalwarp
-#' @importFrom rgdal writeGDAL readGDAL
+#' @importFrom terra rast project crs
 #' @import transformeR
 #' @author A. Casanueva, J. Bedia, M. Iturbide
 #' @examples
@@ -61,25 +61,11 @@ warpGrid <- function(data,
   
   # *** CONVERT GRID TO A SpatialPointsDataFrame ***
   pattern <- transformeR::grid2sp(data)
-  
-  # *** WRITE A GDAL GRID MAP ***
-  outf <- tempfile(fileext = ".tif")
-  suppressWarnings(
-    rgdal::writeGDAL(pattern, fname = outf, drivername = "GTiff", mvFlag = "NA")
-  )
-  
+
   # *** IMAGE RE-PROJECTION ***
-  newf <- tempfile(fileext = ".tif")
-  suppressMessages(
-    gdalUtils::gdalwarp(srcfile = outf,
-                        s_srs = original.CRS,
-                        t_srs = new.CRS,
-                        dstfile = newf,
-                        r = int.method)
-  )
-  # *** READ NEW IMAGE ***
-  n <- rgdal::readGDAL(newf)
-  outf <- newf <- NULL
+  r <- terra::rast(pattern)
+  terra::crs(r) <- original.CRS
+  n <- methods::as(terra::project(r, new.CRS, method = int.method), "Spatial")
   
   # *** sp2grid ***
   start <- getRefDates(data, which = "start")

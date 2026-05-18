@@ -5,8 +5,7 @@ Depends:
 Imports:
     sp,
     abind,
-    gdalUtils,
-    rgdal
+    terra
 Suggests:
     downscaleR,      
     loadeR,
