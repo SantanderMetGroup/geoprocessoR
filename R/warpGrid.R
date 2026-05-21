@@ -63,9 +63,15 @@ warpGrid <- function(data,
   pattern <- transformeR::grid2sp(data)
 
   # *** IMAGE RE-PROJECTION ***
+  sp::proj4string(pattern) <- sp::CRS(SRS_string = original.CRS)
   r <- terra::rast(pattern)
   terra::crs(r) <- original.CRS
-  n <- methods::as(terra::project(r, new.CRS, method = int.method), "Spatial")
+
+  n <- terra::project(r, new.CRS, method = int.method)
+  n <- terra::as.data.frame(n, xy = TRUE, na.rm = FALSE)
+  sp::coordinates(n) <- ~ x + y
+  sp::gridded(n) <- TRUE
+  sp::proj4string(n) <- sp::CRS(SRS_string = new.CRS)
   
   # *** sp2grid ***
   start <- getRefDates(data, which = "start")

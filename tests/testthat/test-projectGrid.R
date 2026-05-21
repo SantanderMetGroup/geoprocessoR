@@ -9,8 +9,9 @@ CRS_RDNEW <- "+proj=utm +zone=30 +datum=WGS84 +units=m +no_defs"
 # Helper functions 
 is_xy_df <- function(xy) {
   is.data.frame(xy) &&
-    all(c("x","y") %in% names(xy)) &&
-    is.numeric(xy$x) && is.numeric(xy$y)
+    ncol(xy) >= 2 &&
+    is.numeric(xy[[1]]) &&
+    is.numeric(xy[[2]])
 }
 is_xy_list <- function(xy) {
   is.list(xy) && all(c("x","y") %in% names(xy)) &&
