@@ -5,7 +5,7 @@ Depends:
 Imports:
     sp(>= 2.0-0),
     sf,
-    terra,
+    stars,
     abind
 Suggests:
     downscaleR,      
