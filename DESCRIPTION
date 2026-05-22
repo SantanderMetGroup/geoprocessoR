@@ -1,16 +1,18 @@
 Package: geoprocessoR
 Depends:
-    R(>= 3.5.0),
+    R(>= 4.2.0),
     transformeR(>= 1.6.1),
 Imports:
-    sp,
-    abind,
-    terra
+    sp(>= 2.0-0),
+    sf,
+    terra,
+    abind
 Suggests:
     downscaleR,      
     loadeR,
     loadeR.ECOMS,
-    visualizeR
+    visualizeR,
+    climate4R.datasets
 Type: Package
 Title: An R package for geoprocessing climate4R data 
 Version: 0.2.2
