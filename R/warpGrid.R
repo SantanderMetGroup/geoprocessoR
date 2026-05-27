@@ -53,92 +53,86 @@ warpGrid <- function(data,
                      original.CRS = "+init=epsg:4326",
                      new.CRS = "+init=epsg:3995", 
                      int.method = "bilinear") {
-  
-  # *** Helper functions to handle CRS ***
-  crs_from_input <- function(value, arg_name) {
-    if (inherits(value, "crs")) return(value)
-    tryCatch(sf::st_crs(value), error = function(e) stop("Non-valid ", arg_name, " argument"))
+
+  crs_to_gdal <- function(x, arg) {
+    x <- if (inherits(x, "crs")) x else tryCatch(sf::st_crs(x), error = function(e) stop("Non-valid ", arg, " argument"))
+    if (is.na(x)) stop("Non-valid ", arg, " argument")
+    if (!is.null(x$input) && !is.na(x$input) && nzchar(x$input)) return(x$input)
+    if (!is.null(x$wkt) && !is.na(x$wkt) && nzchar(x$wkt)) return(x$wkt)
+    stop("Non-valid ", arg, " argument")
   }
 
-  crs_to_gdal_string <- function(crs_obj, arg_name) {
-    if (is.na(crs_obj)) stop("Non-valid ", arg_name, " argument")
-    if (!is.null(crs_obj$input) && !is.na(crs_obj$input) && nzchar(crs_obj$input)) return(crs_obj$input)
-    if (!is.null(crs_obj$wkt) && !is.na(crs_obj$wkt) && nzchar(crs_obj$wkt)) return(crs_obj$wkt)
-    stop("Non-valid ", arg_name, " argument")
-  }
+  original.CRS <- crs_to_gdal(original.CRS, "original.CRS")
+  new.CRS <- crs_to_gdal(new.CRS, "new.CRS")
+  nodata <- -9999
 
-  original_crs <- crs_from_input(original.CRS, "original.CRS")
-  new_crs <- crs_from_input(new.CRS, "new.CRS")
-
-  original_crs_txt <- crs_to_gdal_string(original_crs, "original.CRS")
-  new_crs_txt <- crs_to_gdal_string(new_crs, "new.CRS")
-
-  # *** Convert C4R grid to stars ***
+  # *** CONVERT GRID TO A SpatialPointsDataFrame ***
   pattern <- transformeR::grid2sp(data)
-  pattern_stars <- suppressWarnings(stars::st_as_stars(pattern))
-  sf::st_crs(pattern_stars) <- original_crs
-  band_names <- names(pattern_stars)
+  pattern <- suppressWarnings(stars::st_as_stars(pattern))
+  sf::st_crs(pattern) <- sf::st_crs(original.CRS)
+  band.names <- names(pattern)
 
-  # *** Warp each band/member separately with GDAL ***
-  nodata_value <- -9999
+  # *** WRITE A GDAL GRID MAP AND IMAGE RE-PROJECTION ***
+  if (length(band.names) == 1) { # Case: single band, can be done in one step
+    outf <- tempfile(fileext = ".tif")
+    newf <- tempfile(fileext = ".tif")
+    on.exit(unlink(c(outf, newf), force = TRUE), add = TRUE)
 
-  warped_list <- lapply(band_names, function(nm) {
-    srcfile <- tempfile(fileext = ".tif")
-    dstfile <- tempfile(fileext = ".tif")
-    on.exit(unlink(c(srcfile, dstfile), force = TRUE), add = TRUE)
+    # First step: write the grid to a GeoTIFF file, with the specified nodata value
+    suppressWarnings(stars::write_stars(pattern, dsn = outf, driver = "GTiff", NA_value = nodata))
 
-    # Write the current band/member to a temporary GeoTIFF file with the original CRS
-    suppressWarnings(
-      stars::write_stars(
-        pattern_stars[nm],
-        dsn = srcfile,
-        driver = "GTiff",
-        NA_value = nodata_value))
+    # Second step: warp the GeoTIFF file to the new projection, using the specified interpolation method and nodata value
+    sf::gdal_utils(util = "warp", source = outf, destination = newf, options = c("-s_srs", original.CRS, "-t_srs", new.CRS, "-r", int.method, "-dstnodata", as.character(nodata)), quiet = TRUE)
 
-    # Warp the GeoTIFF file to the new CRS using GDAL via sf::gdal_utils
-    sf::gdal_utils(
-      util = "warp",
-      source = srcfile,
-      destination = dstfile,
-      options = c(
-        "-s_srs", original_crs_txt,
-        "-t_srs", new_crs_txt,
-        "-r", int.method,
-        "-dstnodata", as.character(nodata_value)),
-      quiet = TRUE)
+    # Third step: read the warped GeoTIFF file and convert it to a Spatial object, replacing nodata values with NA
+    n <- suppressWarnings(stars::read_stars(newf, proxy = FALSE))
+    n <- methods::as(n, "Spatial")
+    n@data[[1]][n@data[[1]] == nodata] <- NA_real_
+    names(n@data) <- band.names
+  } else { # Case: multiple bands, need to be done separately and then merged
+    # First step: write each band to a GeoTIFF file, with the specified nodata value
+    outf <- vapply(band.names, function(z) {
+      f <- tempfile(fileext = ".tif")
+      suppressWarnings(stars::write_stars(pattern[z], dsn = f, driver = "GTiff", NA_value = nodata))
+      f
+    }, character(1))
 
-    suppressWarnings(stars::read_stars(dstfile, proxy = FALSE))
-  })
+    # Second step: build the VRT file that references the band files
+    vrtf <- tempfile(fileext = ".vrt")
+    newf <- tempfile(fileext = ".tif")
+    on.exit(unlink(c(outf, vrtf, newf), force = TRUE), add = TRUE)
+    sf::gdal_utils(util = "buildvrt", source = outf, destination = vrtf, options = c("-separate"), quiet = TRUE)
 
-  # *** Convert warped bands back to Spatial and recombine members ***
-  warped_sp <- methods::as(warped_list[[1]], "Spatial")
+    # Third step: warp the VRT file to the new projection, using the specified interpolation method and nodata value
+    sf::gdal_utils(util = "warp", source = vrtf, destination = newf, options = c("-s_srs", original.CRS, "-t_srs", new.CRS, "-r", int.method, "-dstnodata", as.character(nodata), "-wo", "UNIFIED_SRC_NODATA=NO"), quiet = TRUE)
 
-  # Normalize nodata in first band
-  if (!is.null(warped_sp@data) && ncol(warped_sp@data) >= 1) {
-    warped_sp@data[[1]][warped_sp@data[[1]] == nodata_value] <- NA_real_
-  }
+    # Fourth step: extract each warped band to a separate GeoTIFF file
+    band.files <- vapply(seq_along(band.names), function(i) {
+      f <- tempfile(fileext = ".tif")
+      sf::gdal_utils(util = "translate", source = newf, destination = f, options = c("-b", as.character(i)), quiet = TRUE)
+      f
+    }, character(1))
+    on.exit(unlink(band.files, force = TRUE), add = TRUE)
 
-  if (length(warped_list) > 1) {
-    extra_cols <- lapply(warped_list[-1], function(w) {
-      sp_tmp <- methods::as(w, "Spatial")
-      v <- sp_tmp@data[[1]]
-      v[v == nodata_value] <- NA_real_
+    # Fifth step: read the separate band warped GeoTIFF files and merge them into a Spatial object, replacing nodata values with NA
+    sp.list <- lapply(band.files, function(f) methods::as(suppressWarnings(stars::read_stars(f, proxy = FALSE)), "Spatial"))
+    n <- sp.list[[1]]
+    n@data <- as.data.frame(lapply(sp.list, function(x) {
+      v <- x@data[[1]]
+      v[v == nodata] <- NA_real_
       v
-    })
-    warped_sp@data <- data.frame(warped_sp@data, do.call(cbind, extra_cols))
+    }))
+    names(n@data) <- band.names
   }
-  names(warped_sp@data) <- band_names 
 
-  # *** Back to C4R grid ***
+  # *** sp2grid ***
   start <- getRefDates(data, which = "start")
   end <- getRefDates(data, which = "end")
-
-  grid <- transformeR::sgdf2clim(
-    sp = warped_sp,
-    varName = getVarNames(data),
-    level = getGridVerticalLevels(data),
-    dates = list(start = start, end = end),
-    season = getSeason(data))
-
+  
+  grid <- transformeR::sgdf2clim(sp = n,
+                                 varName = getVarNames(data),
+                                 level = getGridVerticalLevels(data),
+                                 dates = list(start = start, end = end),
+                                 season = getSeason(data))
   return(grid)
-} 
+}
