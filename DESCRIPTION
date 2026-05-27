@@ -15,7 +15,7 @@ Suggests:
     climate4R.datasets
 Type: Package
 Title: An R package for geoprocessing climate4R data 
-Version: 0.2.2
+Version: Version: 0.3.0.9000
 Date: 2023-06-22
 Author: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [cph]",
