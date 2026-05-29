@@ -30,3 +30,4 @@ Description: Geoprocessing tools for climate4R <http://www.meteo.unican.es/clima
 License: file LICENSE
 LazyData: true
 Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3
