@@ -14,10 +14,10 @@ warpGrid(
 \arguments{
 \item{data}{A C4R grid (or multimember C4R grid) object, or climatology C4R grid.}
 
-\item{original.CRS}{character as passed to function \code{\link{CRS}} with the original projection. 
+\item{original.CRS}{character or object as passed to function \code{\link[sf]{st_crs}} with the original projection.
 Default to longlat projection (\code{"+init=epsg:4326"}).}
 
-\item{new.CRS}{character string, as passed to function \code{\link{CRS}}, specifying the target projection. 
+\item{new.CRS}{character string or object, as passed to function \code{\link[sf]{st_crs}}, specifying the target projection.
 Default to polar stereographic projection (\code{"+init=epsg:3995"}).}
 
 \item{int.method}{Resampling method. Default to \code{"bilinear"}. See details.}
@@ -29,12 +29,12 @@ Warped grid with the structure of a C4R grid.
 Warp grid to allow plotting in a different projection.
 }
 \details{
-This function is a wrapper of the gdal warping capabilities via gdalwarp.  
+This function is a wrapper of the GDAL warping capabilities via \code{sf::gdal_utils("warp")}.
 
  \strong{int.method}
  
  By default bilinear interpolation is applied to get a complete grid in the target projection. Other options are \code{"near"}, \code{"cubic"},
-  \code{"cubicspline"} etc., passed to the argument \code{r} in \code{gdalUtils::gdalwarp}.
+  \code{"cubicspline"} etc., passed to GDAL through the \code{-r} option.
 }
 \examples{
 library(climate4R.datasets)

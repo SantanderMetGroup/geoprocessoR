@@ -1,20 +1,21 @@
 Package: geoprocessoR
 Depends:
-    R(>= 3.5.0),
+    R(>= 4.2.0),
     transformeR(>= 1.6.1),
 Imports:
-    sp,
-    abind,
-    gdalUtils,
-    rgdal
+    sp(>= 2.0-0),
+    sf,
+    stars,
+    abind
 Suggests:
     downscaleR,      
     loadeR,
     loadeR.ECOMS,
-    visualizeR
+    visualizeR,
+    climate4R.datasets
 Type: Package
 Title: An R package for geoprocessing climate4R data 
-Version: 0.2.2
+Version: 0.3.0.9000
 Date: 2023-06-22
 Author: as.person(c(
     "Santander Meteorology Group <http://meteo.unican.es> [cph]",
@@ -28,4 +29,4 @@ Encoding: UTF-8
 Description: Geoprocessing tools for climate4R <http://www.meteo.unican.es/climate4R>). 
 License: file LICENSE
 LazyData: true
-RoxygenNote: 7.1.2
+Config/roxygen2/version: 8.0.0

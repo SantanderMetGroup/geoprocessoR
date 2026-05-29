@@ -54,15 +54,25 @@
 projectGrid <- function(grid,
                         original.CRS = "",
                         new.CRS = "") {
+  crs_to_character <- function(x) {
+    if (inherits(x, "CRS")) {
+      out <- x@projargs
+      if (!is.null(out) && length(out) == 1L && !is.na(out)) {
+        return(out)
+      }
+      return(NA_character_)
+    }
+    as.character(x)
+  }
   orig.datum <- attr(grid$xyCoords, "projection")
   if (!"CRS" %in% class(original.CRS)) original.CRS <- tryCatch({CRS(original.CRS)}, error = function(err) {stop("Non-valid original.CRS argument")})
   if (!"CRS" %in% class(new.CRS)) new.CRS <- tryCatch({CRS(new.CRS)}, error = function(err) {stop("Non-valid new.CRS argument")})
   # if (orig.datum == "RotatedPole") stop("This function is not applicable to this projection. See Details")
   if (!is.null(orig.datum) & !is.na(original.CRS)) {
     warning("CAUTION! Grid with previusly defined projection: ", orig.datum)
-    attr(grid$xyCoords, "projection") <- as.character(original.CRS)
+    attr(grid$xyCoords, "projection") <- crs_to_character(original.CRS)
   } else if (is.null(orig.datum) & !is.na(original.CRS)) {
-    attr(grid$xyCoords, "projection") <- as.character(original.CRS)
+    attr(grid$xyCoords, "projection") <- crs_to_character(original.CRS)
   } else if (is.null(orig.datum) & is.na(original.CRS)) {
     stop("Please define original.CRS")
   } else if (!is.null(orig.datum) & is.na(original.CRS)) {
@@ -73,7 +83,7 @@ projectGrid <- function(grid,
   data <- get2DmatCoordinates(grid)
   sppoints <- SpatialPoints(data)
   sp::proj4string(sppoints) <- original.CRS
-  message("[",Sys.time(), "] ", "Arguments of the original projection defined as ", original.CRS)
+  message("[",Sys.time(), "] ", "Arguments of the original projection defined as ", crs_to_character(original.CRS))
   if (!is.na(new.CRS)) {
     message("[",Sys.time(), "] ", "Projecting..")
     sppoints.new <- spTransform(sppoints, new.CRS)
@@ -107,12 +117,12 @@ projectGrid <- function(grid,
         grid <- redim(redim(grid, drop = T), member = FALSE, loc = TRUE)
       }
       grid$xyCoords <- as.data.frame(new.coords)
-      attr(grid$xyCoords, "projection") <- as.character(new.CRS)
+      attr(grid$xyCoords, "projection") <- crs_to_character(new.CRS)
       attr(grid$xyCoords, "resX") <- 0
       attr(grid$xyCoords, "resY") <- 0
     } else {
       grid$xyCoords <- list("x" = unique(new.coords[,1]), "y" = unique(new.coords[,2]))
-      attr(grid$xyCoords, "projection") <- as.character(new.CRS)
+      attr(grid$xyCoords, "projection") <- crs_to_character(new.CRS)
       attr(grid$xyCoords, "resX") <- xdists[[1]]
       attr(grid$xyCoords, "resY") <- ydists[[1]]
     }
