@@ -21,3 +21,12 @@ See the [Releases section](https://github.com/SantanderMetGroup/geoprocessoR/rel
 
 ## v0.2.2 (22 Jun 2023)
 * Update of the DESCRIPTION file
+
+## v0.3.0 (29 May 2026)
+
+* Removed dependency on deprecated/retired `rgdal` and `gdalUtils` packages.
+* Updated raster reprojection and warping workflows to use `sf` and `stars` instead.
+* Updated package requirements to use modern `sp` versions (`sp >= 2.0-0`).
+* Updated `warpGrid` internals while preserving the legacy output as closely as possible. Small differences may appear at the edge of warped domains because modern GDAL may interpolate border cells that the previous `rgdal`/`gdalUtils` workflow returned as `NA`.
+* Added tests for `overGrid`, `projectGrid` and `warpGrid`, including regular grids, station data and multimember grids.
+* Added `climate4R.datasets` to suggested packages for running examples and tests.
