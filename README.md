@@ -9,7 +9,9 @@ The recommended installation procedure is to use the `install_github` command fr
 ```r
 devtools::install_github(c("SantanderMetGroup/transformeR", "SantanderMetGroup/geoprocessoR"))
 ```
-**NOTE:** Note that `transformeR` is a dependency for `geoprocessoR`. It also requires rgdal: `install.packages("rgdal")`. Note that `transformeR` also includes illustrative datasets for the `climate4R` framework.
+**NOTE:** Note that `transformeR` is a dependency for `geoprocessoR`. Note that `transformeR` also includes illustrative datasets for the `climate4R` framework.
+
+**Compatibility note:** Earlier versions of `geoprocessoR` (< 0.3.0) used `rgdal` and `gdalUtils` for raster reprojection and warping. Since these packages are now deprecated/retired, the current development version uses `sf` and `stars` instead. A small difference may appear in `warpGrid` at the edge of the warped domain: modern GDAL can interpolate some border cells that the old `rgdal`/`gdalUtils` workflow returned as `NA` (a few edge `NA` values may become valid interpolated values). 
 
 **EXAMPLE:** The following code shows an example of `climate4R` data projection for gridded data (see the [Wiki](https://github.com/SantanderMetGroup/geoprocessoR/wiki) for more worked examples).
 
